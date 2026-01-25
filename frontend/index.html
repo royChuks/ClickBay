@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./materialize/css/materialize.min.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="./src/carousel.js"></script>
+    <title>ClickBay</title>
+</head>
+<body>
+
+
+    <nav class="navbar">
+         <div class="navbar-container">
+            <a href="#" class="navbar-brand">ClickBay</a>
+            <ul class="navbar-nav">
+                <li><a href="#" class="nav-link"><i class="material-icons">person</i> Profile
+                    <div class="popup profile-popup">
+                        <div class="profile-popup-header">
+                            <div class="profile-avatar-popup" id="profileAvatar">
+                                <span id="avatarLetter">?</span>
+                            </div>
+                            <div class="profile-info-popup">
+                                <div class="profile-name" id="profileName">Not logged in</div>
+                                <div class="profile-email" id="profileEmail">Click to login</div>
+                            </div>
+                        </div>
+                        <div class="profile-popup-content" id="profileContent">
+                            <!-- Guest user content -->
+                            <button class="popup-option" onclick="window.location.href='login.html'">
+                                <i class="material-icons">login</i>
+                                Sign In
+                            </button>
+                            <button class="popup-option" onclick="window.location.href='signup.html'">
+                                <i class="material-icons">person_add</i>
+                                Create Account
+                            </button>
+                        </div>
+                        <!-- Logged in user content (hidden by default) -->
+                        <div class="profile-popup-content logged-in-content" id="loggedInContent" style="display: none;">
+                            <button class="popup-option" onclick="window.location.href='profile.html'">
+                                <i class="material-icons">account_circle</i>
+                                View Profile
+                            </button>
+                            <button class="popup-option" onclick="toggleSync()">
+                                <i class="material-icons" id="syncIcon">sync_disabled</i>
+                                <span id="syncText">Sync Off</span>
+                            </button>
+                            <button class="popup-option" onclick="openSettings()">
+                                <i class="material-icons">settings</i>
+                                Settings
+                            </button>
+                            <div class="popup-divider"></div>
+                            <button class="popup-option logout-option" onclick="handleLogout()">
+                                <i class="material-icons">logout</i>
+                                Sign Out
+                            </button>
+                        </div>
+                    </div>
+                </a></li>
+                <li><a href="#" class="nav-link"><i class="material-icons">notes</i> Notes
+                    <div class="popup notes-popup">
+                        <button class="popup-option" onclick="openSectionModal('history')">
+                            <i class="material-icons">history</i>
+                            <div class="option-label">
+                                <span class="option-title">History</span>
+                                <span class="option-desc">Recent searches & bookmarks</span>
+                            </div>
+                            <i class="material-icons chevron">chevron_right</i>
+                        </button>
+                        <button class="popup-option" onclick="openSectionModal('highlights')">
+                            <i class="material-icons">star</i>
+                            <div class="option-label">
+                                <span class="option-title">Highlights</span>
+                                <span class="option-desc">Key insights & topics</span>
+                            </div>
+                            <i class="material-icons chevron">chevron_right</i>
+                        </button>
+                        <button class="popup-option" onclick="openSectionModal('hooks')">
+                            <i class="material-icons">link</i>
+                            <div class="option-label">
+                                <span class="option-title">Hooks</span>
+                                <span class="option-desc">Areas of interest</span>
+                            </div>
+                            <i class="material-icons chevron">chevron_right</i>
+                        </button>
+                        <div class="popup-footer">
+                            <button class="view-all-btn" onclick="openSectionModal('history')">Explore All Notes</button>
+                        </div>
+                    </div>
+                </a></li>
+                <li><a href="#" class="nav-link"><i class="material-icons">hub</i> Connect
+                    <div class="popup">
+                        <button class="popup-option" onclick="console.log('MCP servers clicked')">
+                            <i class="material-icons">dns</i>
+                            MCP servers
+                        </button>
+                        <button class="popup-option" onclick="window.location.href='analytics.html'">
+                            <i class="material-icons">analytics</i>
+                            Scrape Analytics
+                        </button>
+                        <button class="popup-option" onclick="console.log('Track Logging clicked')">
+                            <i class="material-icons">track_changes</i>
+                            Track Logging
+                        </button>
+                        <button class="popup-option" onclick="console.log('APIs clicked')">
+                            <i class="material-icons">api</i>
+                            APIs
+                        </button>
+                    </div>
+                </a></li>
+            </ul>
+         </div>
+        </nav>
+        <div class="container">
+           <h1> Welcome back to ClickBay😊 </h1> 
+        </div>
+        <div class="carousel-container">
+            <button class="carousel-arrow left auto-hide" onclick="prevCard()" aria-label="Previous">
+                <i class="material-icons">chevron_left</i>
+            </button>
+            <div class="carousel-track" id="carouselTrack">
+                <div class="card">Blog</div>
+                <div class="card">Brand</div>
+                <div class="card">Business</div>
+                <div class="card">News</div>
+                <div class="card">Community</div>
+            </div>
+            <button class="carousel-arrow right auto-hide" onclick="nextCard()" aria-label="Next">
+                <i class="material-icons">chevron_right</i>
+            </button>
+        </div>
+        <div class="ai-search-container">
+            <form class="search-form">
+                <input type="text" class="ai-search-box" placeholder="Ask ClickBay..." required>
+                <button type="submit" class="ai-search-button">Scrape</button>
+            </form>
+        </div>
+        <!-- Section Detail Modal -->
+        <div id="sectionModal" class="modal-overlay">
+            <div class="modal-content animate-pop-in">
+                <div class="modal-header">
+                    <div class="modal-title-group">
+                        <i class="material-icons modal-icon" id="modalIcon">notes</i>
+                        <h2 id="modalTitle">Section Details</h2>
+                    </div>
+                    <button class="modal-close-btn" onclick="closeSectionModal()">
+                        <i class="material-icons">close</i>
+                    </button>
+                </div>
+                <div class="modal-body" id="modalBody">
+                    <!-- Dynamic content injected here -->
+                </div>
+            </div>
+        </div>
+
+        <script src="./materialize/js/materialize.min.js"></script>
+    <script>
+        // Initialize global functions immediately to prevent reference errors
+        window.nextCard = window.prevCard = window.togglePopup = function() {
+            console.log('Function called before module loaded');
+        };
+    </script>
+    <script type="module" src="src/dist/main.js"></script>
+</body>
+</html>

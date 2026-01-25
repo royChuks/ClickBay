@@ -1,0 +1,26 @@
+{
+  "name": "clickbay",
+  "version": "1.0.0",
+  "description": "virtual assitant system for conversion ",
+  "main": "main.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "tsc",
+    "start": "live-server",
+    "dev": "tsc && live-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "royChuks"
+  },
+  "keywords": [
+    ""
+  ],
+    "devDependencies": {
+      "typescript": "^5.0.0",
+      "live-server": "^1.2.2"
+    },
+
+  "author": "David Chuks",
+  "license": "MIT"
+}

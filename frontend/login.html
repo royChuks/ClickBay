@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./materialize/css/materialize.min.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Login - ClickBay</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-brand">ClickBay</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h2>Welcome Back</h2>
+                    <p>Sign in to your ClickBay account</p>
+                </div>
+
+                <form class="auth-form" id="loginForm">
+                    <div class="input-field">
+                        <i class="material-icons prefix">email</i>
+                        <input type="email" id="loginEmail" required>
+                        <label for="loginEmail">Email Address</label>
+                    </div>
+
+                    <div class="input-field">
+                        <i class="material-icons prefix">lock</i>
+                        <input type="password" id="loginPassword" required>
+                        <label for="loginPassword">Password</label>
+                    </div>
+
+                    <div class="auth-options">
+                        <label>
+                            <input type="checkbox" id="rememberMe">
+                            <span>Remember me</span>
+                        </label>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="auth-button">
+                        <span>Sign In</span>
+                        <i class="material-icons">arrow_forward</i>
+                    </button>
+                </form>
+
+                <div class="auth-divider">
+                    <span>or</span>
+                </div>
+
+                <div class="social-auth">
+                    <button class="social-button google">
+                        <i class="material-icons">account_circle</i>
+                        Continue with Google
+                    </button>
+                    <button class="social-button github">
+                        <i class="material-icons">code</i>
+                        Continue with GitHub
+                    </button>
+                </div>
+
+                <div class="auth-footer">
+                    <p>Don't have an account?
+                        <a href="signup.html" class="auth-link">Sign up</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./materialize/js/materialize.min.js"></script>
+    <script src="src/dist/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="ClickBay Scrape Analytics Dashboard - Advanced AI-powered content analysis">
+    <link rel="stylesheet" href="./materialize/css/materialize.min.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/analytics-dashboard.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>Scrape Analytics Dashboard - ClickBay</title>
+</head>
+<body class="dashboard-body">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-brand">ClickBay</a>
+            <ul class="navbar-nav">
+                <li><a href="index.html" class="nav-link"><i class="material-icons">home</i> Home</a></li>
+                <li><a href="analytics.html" class="nav-link active"><i class="material-icons">analytics</i> Analytics</a></li>
+                <li><a href="profile.html" class="nav-link"><i class="material-icons">person</i> Profile</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="dashboard-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="material-icons">insights</i>
+                    <span>Analytics</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="sidebar-link active" data-section="overview">
+                    <i class="material-icons">dashboard</i>
+                    <span>Overview</span>
+                </a>
+                <a href="#" class="sidebar-link" data-section="sentiment">
+                    <i class="material-icons">sentiment_satisfied</i>
+                    <span>Sentiment</span>
+                </a>
+                <a href="#" class="sidebar-link" data-section="keywords">
+                    <i class="material-icons">label</i>
+                    <span>Keywords</span>
+                </a>
+                <a href="#" class="sidebar-link" data-section="entities">
+                    <i class="material-icons">account_tree</i>
+                    <span>Entities</span>
+                </a>
+                <a href="#" class="sidebar-link" data-section="social">
+                    <i class="material-icons">share</i>
+                    <span>Social</span>
+                </a>
+                <a href="#" class="sidebar-link" data-section="reports">
+                    <i class="material-icons">assessment</i>
+                    <span>Reports</span>
+                </a>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sync-status">
+                    <div class="sync-indicator active"></div>
+                    <span>Live Data</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="dashboard-main">
+            <!-- Dashboard Header -->
+            <header class="dashboard-header">
+                <div class="header-left">
+                    <h1 class="dashboard-title">Scrape Analytics</h1>
+                    <p class="dashboard-subtitle">AI-powered insights from your scraped content</p>
+                </div>
+                <div class="header-right">
+                    <div class="header-actions">
+                        <button class="action-btn" id="refreshBtn">
+                            <i class="material-icons">refresh</i>
+                        </button>
+                        <button class="action-btn" id="exportBtn">
+                            <i class="material-icons">download</i>
+                        </button>
+                        <button class="action-btn" id="settingsBtn">
+                            <i class="material-icons">settings</i>
+                        </button>
+                    </div>
+                    <div class="date-range-picker">
+                        <i class="material-icons">calendar_today</i>
+                        <span id="dateRange">Last 7 days</span>
+                        <i class="material-icons">expand_more</i>
+                    </div>
+                </div>
+            </header>
+
+            <!-- URL Input Section -->
+            <section class="url-input-section">
+                <div class="url-input-wrapper">
+                    <div class="url-icon">
+                        <i class="material-icons">link</i>
+                    </div>
+                    <input type="url" id="analyzeUrl" class="url-input-field" placeholder="Enter URL to analyze (e.g., https://example.com/article)">
+                    <button class="analyze-button" id="analyzeBtn">
+                        <i class="material-icons">search</i>
+                        <span>Analyze</span>
+                    </button>
+                </div>
+                <div class="quick-samples">
+                    <span class="sample-label">Quick samples:</span>
+                    <button class="sample-chip" data-url="https://techcrunch.com/article">
+                        <i class="material-icons">computer</i> Tech News
+                    </button>
+                    <button class="sample-chip" data-url="https://medium.com/blog-post">
+                        <i class="material-icons">article</i> Blog Post
+                    </button>
+                    <button class="sample-chip" data-url="https://twitter.com/trending">
+                        <i class="material-icons">tag</i> Social Feed
+                    </button>
+                </div>
+            </section>
+
+            <!-- Stats Overview Cards -->
+            <section class="stats-grid" id="statsGrid">
+                <div class="stat-card gradient-blue">
+                    <div class="stat-icon">
+                        <i class="material-icons">visibility</i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalViews">15,420</span>
+                        <span class="stat-label">Total Views</span>
+                    </div>
+                    <div class="stat-trend up">
+                        <i class="material-icons">trending_up</i>
+                        <span>+12.5%</span>
+                    </div>
+                </div>
+                <div class="stat-card gradient-green">
+                    <div class="stat-icon">
+                        <i class="material-icons">thumb_up</i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalEngagement">2,847</span>
+                        <span class="stat-label">Engagements</span>
+                    </div>
+                    <div class="stat-trend up">
+                        <i class="material-icons">trending_up</i>
+                        <span>+8.3%</span>
+                    </div>
+                </div>
+                <div class="stat-card gradient-purple">
+                    <div class="stat-icon">
+                        <i class="material-icons">psychology</i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="sentimentScore">78%</span>
+                        <span class="stat-label">Positive Sentiment</span>
+                    </div>
+                    <div class="stat-trend up">
+                        <i class="material-icons">trending_up</i>
+                        <span>+5.2%</span>
+                    </div>
+                </div>
+                <div class="stat-card gradient-orange">
+                    <div class="stat-icon">
+                        <i class="material-icons">tag</i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="keywordsFound">42</span>
+                        <span class="stat-label">Keywords Found</span>
+                    </div>
+                    <div class="stat-trend neutral">
+                        <i class="material-icons">trending_flat</i>
+                        <span>0%</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Main Dashboard Grid -->
+            <section class="dashboard-grid">
+                <!-- Sentiment Analysis Panel -->
+                <div class="dashboard-panel sentiment-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <i class="material-icons">sentiment_satisfied</i>
+                            <h3>Sentiment Analysis</h3>
+                        </div>
+                        <div class="panel-badge positive" id="sentimentBadge">Positive</div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="sentiment-gauge">
+                            <div class="gauge-container">
+                                <svg class="gauge-svg" viewBox="0 0 200 100">
+                                    <path class="gauge-bg" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="#e5e7eb" stroke-width="12"/>
+                                    <path class="gauge-fill" id="gaugeFill" d="M 20 100 A 80 80 0 0 1 180 100" fill="none" stroke="url(#gaugeGradient)" stroke-width="12" stroke-dasharray="251" stroke-dashoffset="63"/>
+                                    <defs>
+                                        <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                            <stop offset="0%" style="stop-color:#ef4444"/>
+                                            <stop offset="50%" style="stop-color:#f59e0b"/>
+                                            <stop offset="100%" style="stop-color:#10b981"/>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                                <div class="gauge-value" id="gaugeValue">78%</div>
+                                <div class="gauge-label">Confidence Score</div>
+                            </div>
+                        </div>
+                        <div class="sentiment-breakdown">
+                            <div class="breakdown-item">
+                                <div class="breakdown-bar positive" style="width: 65%"></div>
+                                <span class="breakdown-label">Positive</span>
+                                <span class="breakdown-value">65%</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-bar neutral" style="width: 25%"></div>
+                                <span class="breakdown-label">Neutral</span>
+                                <span class="breakdown-value">25%</span>
+                            </div>
+                            <div class="breakdown-item">
+                                <div class="breakdown-bar negative" style="width: 10%"></div>
+                                <span class="breakdown-label">Negative</span>
+                                <span class="breakdown-value">10%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Keywords Cloud Panel -->
+                <div class="dashboard-panel keywords-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <i class="material-icons">label</i>
+                            <h3>Top Keywords</h3>
+                        </div>
+                        <select class="panel-select" id="keywordFilter">
+                            <option value="all">All</option>
+                            <option value="trending">Trending</option>
+                            <option value="recent">Recent</option>
+                        </select>
+                    </div>
+                    <div class="panel-body">
+                        <div class="keywords-cloud" id="keywordsCloud">
+                            <span class="keyword-bubble size-xl">artificial intelligence</span>
+                            <span class="keyword-bubble size-lg">machine learning</span>
+                            <span class="keyword-bubble size-lg">automation</span>
+                            <span class="keyword-bubble size-md">innovation</span>
+                            <span class="keyword-bubble size-md">technology</span>
+                            <span class="keyword-bubble size-sm">data science</span>
+                            <span class="keyword-bubble size-sm">analytics</span>
+                            <span class="keyword-bubble size-sm">cloud</span>
+                            <span class="keyword-bubble size-xs">security</span>
+                            <span class="keyword-bubble size-xs">blockchain</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Engagement Chart Panel -->
+                <div class="dashboard-panel chart-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <i class="material-icons">show_chart</i>
+                            <h3>Engagement Over Time</h3>
+                        </div>
+                        <div class="chart-tabs">
+                            <button class="chart-tab active" data-period="7d">7D</button>
+                            <button class="chart-tab" data-period="30d">30D</button>
+                            <button class="chart-tab" data-period="90d">90D</button>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="chart-container" id="engagementChart">
+                            <div class="chart-bars">
+                                <div class="chart-bar" style="--height: 45%"><span>Mon</span></div>
+                                <div class="chart-bar" style="--height: 68%"><span>Tue</span></div>
+                                <div class="chart-bar" style="--height: 52%"><span>Wed</span></div>
+                                <div class="chart-bar" style="--height: 85%"><span>Thu</span></div>
+                                <div class="chart-bar" style="--height: 73%"><span>Fri</span></div>
+                                <div class="chart-bar" style="--height: 42%"><span>Sat</span></div>
+                                <div class="chart-bar" style="--height: 58%"><span>Sun</span></div>
+                            </div>
+                            <div class="chart-legend">
+                                <div class="legend-item">
+                                    <span class="legend-dot views"></span>
+                                    <span>Views</span>
+                                </div>
+                                <div class="legend-item">
+                                    <span class="legend-dot engagement"></span>
+                                    <span>Engagement</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Entity Recognition Panel -->
+                <div class="dashboard-panel entities-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <i class="material-icons">account_tree</i>
+                            <h3>Entity Recognition</h3>
+                        </div>
+                        <span class="panel-count" id="entityCount">12 entities</span>
+                    </div>
+                    <div class="panel-body">
+                        <div class="entity-tabs">
+                            <button class="entity-tab active" data-type="people">
+                                <i class="material-icons">person</i>
+                                People
+                            </button>
+                            <button class="entity-tab" data-type="places">
+                                <i class="material-icons">place</i>
+                                Places
+                            </button>
+                            <button class="entity-tab" data-type="orgs">
+                                <i class="material-icons">business</i>
+                                Orgs
+                            </button>
+                        </div>
+                        <div class="entity-list" id="entityList">
+                            <div class="entity-item">
+                                <div class="entity-avatar">EM</div>
+                                <div class="entity-info">
+                                    <span class="entity-name">Elon Musk</span>
+                                    <span class="entity-mentions">8 mentions</span>
+                                </div>
+                            </div>
+                            <div class="entity-item">
+                                <div class="entity-avatar">SP</div>
+                                <div class="entity-info">
+                                    <span class="entity-name">Sundar Pichai</span>
+                                    <span class="entity-mentions">5 mentions</span>
+                                </div>
+                            </div>
+                            <div class="entity-item">
+                                <div class="entity-avatar">JB</div>
+                                <div class="entity-info">
+                                    <span class="entity-name">Jeff Bezos</span>
+                                    <span class="entity-mentions">3 mentions</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Topic Distribution Panel -->
+                <div class="dashboard-panel topics-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <i class="material-icons">pie_chart</i>
+                            <h3>Topic Distribution</h3>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="donut-chart">
+                            <svg viewBox="0 0 160 160" class="donut-svg">
+                                <circle cx="80" cy="80" r="60" fill="none" stroke="#3b82f6" stroke-width="20" stroke-dasharray="132 245" stroke-dashoffset="0"/>
+                                <circle cx="80" cy="80" r="60" fill="none" stroke="#10b981" stroke-width="20" stroke-dasharray="94 283" stroke-dashoffset="-132"/>
+                                <circle cx="80" cy="80" r="60" fill="none" stroke="#f59e0b" stroke-width="20" stroke-dasharray="75 302" stroke-dashoffset="-226"/>
+                                <circle cx="80" cy="80" r="60" fill="none" stroke="#8b5cf6" stroke-width="20" stroke-dasharray="76 301" stroke-dashoffset="-301"/>
+                            </svg>
+                            <div class="donut-center">
+                                <span class="donut-value">4</span>
+                                <span class="donut-label">Topics</span>
+                            </div>
+                        </div>
+                        <div class="topic-legend">
+                            <div class="topic-legend-item">
+                                <span class="topic-dot" style="background: #3b82f6"></span>
+                                <span class="topic-name">AI & ML</span>
+                                <span class="topic-percent">35%</span>
+                            </div>
+                            <div class="topic-legend-item">
+                                <span class="topic-dot" style="background: #10b981"></span>
+                                <span class="topic-name">Technology</span>
+                                <span class="topic-percent">25%</span>
+                            </div>
+                            <div class="topic-legend-item">
+                                <span class="topic-dot" style="background: #f59e0b"></span>
+                                <span class="topic-name">Business</span>
+                                <span class="topic-percent">20%</span>
+                            </div>
+                            <div class="topic-legend-item">
+                                <span class="topic-dot" style="background: #8b5cf6"></span>
+                                <span class="topic-name">Innovation</span>
+                                <span class="topic-percent">20%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Content Summary Panel -->
+                <div class="dashboard-panel summary-panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <i class="material-icons">summarize</i>
+                            <h3>Content Summary</h3>
+                        </div>
+                        <div class="ai-badge">
+                            <i class="material-icons">auto_awesome</i>
+                            AI Generated
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <p class="summary-text" id="summaryText">
+                            This article discusses the latest advancements in artificial intelligence and machine learning technologies, exploring their potential impact on various industries. The content highlights key developments in automation, digital transformation, and data science, with insights from industry leaders.
+                        </p>
+                        <div class="summary-stats">
+                            <div class="summary-stat">
+                                <i class="material-icons">text_fields</i>
+                                <div class="stat-detail">
+                                    <span class="stat-num" id="wordCount">1,247</span>
+                                    <span class="stat-text">Words</span>
+                                </div>
+                            </div>
+                            <div class="summary-stat">
+                                <i class="material-icons">format_list_numbered</i>
+                                <div class="stat-detail">
+                                    <span class="stat-num" id="sentenceCount">89</span>
+                                    <span class="stat-text">Sentences</span>
+                                </div>
+                            </div>
+                            <div class="summary-stat">
+                                <i class="material-icons">schedule</i>
+                                <div class="stat-detail">
+                                    <span class="stat-num" id="readTime">6 min</span>
+                                    <span class="stat-text">Read Time</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Metrics Panel -->
+                <div class="dashboard-panel social-panel full-width">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <i class="material-icons">share</i>
+                            <h3>Social Media Performance</h3>
+                        </div>
+                        <div class="live-indicator">
+                            <span class="live-dot"></span>
+                            Live
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <div class="social-metrics-grid">
+                            <div class="social-metric-card">
+                                <div class="social-icon facebook">
+                                    <i class="material-icons">thumb_up</i>
+                                </div>
+                                <div class="social-data">
+                                    <span class="social-value" id="likesCount">1,247</span>
+                                    <span class="social-label">Likes</span>
+                                </div>
+                                <div class="social-graph">
+                                    <svg viewBox="0 0 100 30">
+                                        <polyline points="0,25 15,20 30,22 45,15 60,18 75,10 90,12 100,5" fill="none" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="social-metric-card">
+                                <div class="social-icon twitter">
+                                    <i class="material-icons">chat_bubble</i>
+                                </div>
+                                <div class="social-data">
+                                    <span class="social-value" id="commentsCount">89</span>
+                                    <span class="social-label">Comments</span>
+                                </div>
+                                <div class="social-graph">
+                                    <svg viewBox="0 0 100 30">
+                                        <polyline points="0,20 15,18 30,25 45,12 60,15 75,8 90,10 100,5" fill="none" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="social-metric-card">
+                                <div class="social-icon instagram">
+                                    <i class="material-icons">repeat</i>
+                                </div>
+                                <div class="social-data">
+                                    <span class="social-value" id="sharesCount">234</span>
+                                    <span class="social-label">Shares</span>
+                                </div>
+                                <div class="social-graph">
+                                    <svg viewBox="0 0 100 30">
+                                        <polyline points="0,28 15,22 30,25 45,18 60,20 75,12 90,8 100,10" fill="none" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="social-metric-card">
+                                <div class="social-icon linkedin">
+                                    <i class="material-icons">visibility</i>
+                                </div>
+                                <div class="social-data">
+                                    <span class="social-value" id="viewsCount">15.4K</span>
+                                    <span class="social-label">Views</span>
+                                </div>
+                                <div class="social-graph">
+                                    <svg viewBox="0 0 100 30">
+                                        <polyline points="0,25 15,18 30,20 45,12 60,8 75,15 90,5 100,8" fill="none" stroke="currentColor" stroke-width="2"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="engagement-progress">
+                            <div class="progress-header">
+                                <span class="progress-title">Overall Engagement Rate</span>
+                                <span class="progress-value" id="engagementRate">8.2%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="engagementFill" style="width: 82%"></div>
+                            </div>
+                            <div class="progress-labels">
+                                <span>0%</span>
+                                <span>Industry Average: 5.5%</span>
+                                <span>10%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-modal">
+            <div class="loading-animation">
+                <div class="loading-circle"></div>
+                <div class="loading-circle"></div>
+                <div class="loading-circle"></div>
+            </div>
+            <h3>Analyzing Content</h3>
+            <p>Our AI is processing your scraped data...</p>
+            <div class="loading-progress">
+                <div class="loading-progress-bar" id="loadingProgress"></div>
+            </div>
+            <div class="loading-steps">
+                <div class="loading-step active" id="step1">
+                    <i class="material-icons">check_circle</i>
+                    <span>Extracting content</span>
+                </div>
+                <div class="loading-step" id="step2">
+                    <i class="material-icons">radio_button_unchecked</i>
+                    <span>Analyzing sentiment</span>
+                </div>
+                <div class="loading-step" id="step3">
+                    <i class="material-icons">radio_button_unchecked</i>
+                    <span>Extracting keywords</span>
+                </div>
+                <div class="loading-step" id="step4">
+                    <i class="material-icons">radio_button_unchecked</i>
+                    <span>Identifying entities</span>
+                </div>
+                <div class="loading-step" id="step5">
+                    <i class="material-icons">radio_button_unchecked</i>
+                    <span>Generating insights</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./materialize/js/materialize.min.js"></script>
+    <script src="src/dist/analytics.js"></script>
+</body>
+</html>

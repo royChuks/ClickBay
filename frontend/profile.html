@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./materialize/css/materialize.min.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Profile - ClickBay</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-brand">ClickBay</a>
+            <ul class="navbar-nav">
+                <li><a href="#" class="nav-link">Dashboard</a></li>
+                <li><a href="#" class="nav-link">Settings</a></li>
+                <li><a href="#" id="logoutBtn" class="nav-link">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="profile-container">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <i class="material-icons">account_circle</i>
+                </div>
+                <div class="profile-info">
+                    <h1 id="userName">Welcome back!</h1>
+                    <p id="userEmail">user@example.com</p>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <span class="stat-number" id="searchesCount">0</span>
+                            <span class="stat-label">Searches</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="savedItemsCount">0</span>
+                            <span class="stat-label">Saved Items</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number" id="accountAge">0</span>
+                            <span class="stat-label">Days Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="profile-content">
+                <div class="profile-section">
+                    <h2>Recent Activity</h2>
+                    <div class="activity-list" id="activityList">
+                        <div class="activity-item">
+                            <i class="material-icons">search</i>
+                            <div class="activity-content">
+                                <p>Welcome to ClickBay! Start exploring by using the search feature.</p>
+                                <span class="activity-time">Just now</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h2>Quick Actions</h2>
+                    <div class="quick-actions">
+                        <a href="index.html" class="action-card">
+                            <i class="material-icons">search</i>
+                            <h3>Start Searching</h3>
+                            <p>Use ClickBay's AI-powered search</p>
+                        </a>
+                        <a href="index.html#notes" class="action-card">
+                            <i class="material-icons">note</i>
+                            <h3>View Notes</h3>
+                            <p>Access your saved notes and highlights</p>
+                        </a>
+                        <a href="index.html#connect" class="action-card">
+                            <i class="material-icons">link</i>
+                            <h3>Connect Services</h3>
+                            <p>Link external APIs and services</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./materialize/js/materialize.min.js"></script>
+    <script src="src/dist/profile.js"></script>
+</body>
+</html>

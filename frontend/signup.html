@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./materialize/css/materialize.min.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Sign Up - ClickBay</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-brand">ClickBay</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="auth-container">
+            <div class="auth-card">
+                <div class="auth-header">
+                    <h2>Join ClickBay</h2>
+                    <p>Create your account to get started</p>
+                </div>
+
+                <form class="auth-form" id="signupForm">
+                    <div class="input-field">
+                        <i class="material-icons prefix">person</i>
+                        <input type="text" id="signupName" required>
+                        <label for="signupName">Full Name</label>
+                    </div>
+
+                    <div class="input-field">
+                        <i class="material-icons prefix">email</i>
+                        <input type="email" id="signupEmail" required>
+                        <label for="signupEmail">Email Address</label>
+                    </div>
+
+                    <div class="input-field">
+                        <i class="material-icons prefix">lock</i>
+                        <input type="password" id="signupPassword" required>
+                        <label for="signupPassword">Password</label>
+                    </div>
+
+                    <div class="input-field">
+                        <i class="material-icons prefix">lock_outline</i>
+                        <input type="password" id="signupConfirmPassword" required>
+                        <label for="signupConfirmPassword">Confirm Password</label>
+                    </div>
+
+                    <div class="auth-options">
+                        <label>
+                            <input type="checkbox" id="agreeTerms" required>
+                            <span>I agree to the <a href="#" class="auth-link">Terms of Service</a> and <a href="#" class="auth-link">Privacy Policy</a></span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="auth-button">
+                        <span>Create Account</span>
+                        <i class="material-icons">person_add</i>
+                    </button>
+                </form>
+
+                <div class="auth-divider">
+                    <span>or</span>
+                </div>
+
+                <div class="social-auth">
+                    <button class="social-button google">
+                        <i class="material-icons">account_circle</i>
+                        Continue with Google
+                    </button>
+                    <button class="social-button github">
+                        <i class="material-icons">code</i>
+                        Continue with GitHub
+                    </button>
+                </div>
+
+                <div class="auth-footer">
+                    <p>Already have an account?
+                        <a href="login.html" class="auth-link">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./materialize/js/materialize.min.js"></script>
+    <script src="src/dist/auth.js"></script>
+</body>
+</html>
