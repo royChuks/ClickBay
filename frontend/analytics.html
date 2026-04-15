@@ -15,7 +15,16 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="navbar-container">
-            <a href="index.html" class="navbar-brand">ClickBay</a>
+            <a href="#" class="navbar-brand">ClickBay</a>
+            <script>
+                // Check authentication on analytics.html load
+                document.addEventListener('DOMContentLoaded', () => {
+                    const currentUser = JSON.parse(localStorage.getItem('clickbay_current_user') || 'null');
+                    if (!currentUser) {
+                        window.location.href = 'login.html';
+                    }
+                });
+            </script>
             <ul class="navbar-nav">
                 <li><a href="index.html" class="nav-link"><i class="material-icons">home</i> Home</a></li>
                 <li><a href="analytics.html" class="nav-link active"><i class="material-icons">analytics</i> Analytics</a></li>

@@ -95,7 +95,7 @@ function handleLogout(): void {
     if (confirm('Are you sure you want to log out?')) {
         localStorage.removeItem('clickbay_current_user');
         localStorage.removeItem('clickbay_remember_login');
-        window.location.href = 'index.html';
+        window.location.href = 'login.html';
     }
 }
 
@@ -205,6 +205,11 @@ export function updateUserStats(userId: string, action: 'search' | 'save'): void
     }
 
     localStorage.setItem('clickbay_activities', JSON.stringify(activities));
+}
+
+// Navigate to index page
+function goToIndex(): void {
+    window.location.href = 'index.html';
 }
 
 // DOM Content Loaded

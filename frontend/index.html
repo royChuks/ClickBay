@@ -15,6 +15,15 @@
     <nav class="navbar">
          <div class="navbar-container">
             <a href="#" class="navbar-brand">ClickBay</a>
+            <script>
+                // Check authentication on index.html load
+                document.addEventListener('DOMContentLoaded', () => {
+                    const currentUser = JSON.parse(localStorage.getItem('clickbay_current_user') || 'null');
+                    if (!currentUser) {
+                        window.location.href = 'login.html';
+                    }
+                });
+            </script>
             <ul class="navbar-nav">
                 <li><a href="#" class="nav-link"><i class="material-icons">person</i> Profile
                     <div class="popup profile-popup">
