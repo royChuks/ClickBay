@@ -1,4 +1,5 @@
 import { Bookmark } from '../types';
+import { memoryStore, nextId } from '../database/memory-store';
 
 /**
  * Bookmark Repository - Data access layer for Bookmark operations
@@ -13,84 +14,131 @@ export class BookmarkRepository {
     tags: string[] = [],
     notes: string = ''
   ): Promise<Bookmark> {
-    // TODO: Implement Neo4j connection and save
-    const id = `bookmark_${Date.now()}`;
-    return {
+    const id = nextId('bookmark');
+    const bookmark: Bookmark = {
       id,
       userId,
       contentId,
+      content: memoryStore.contents.get(contentId),
       tags,
       notes,
       createdAt: new Date(),
       updatedAt: new Date()
     };
+    memoryStore.bookmarks.set(id, bookmark);
+    return bookmark;
   }
 
   /**
    * Find bookmark by ID
    */
-  static async findById(_id: string): Promise<Bookmark | null> {
-    // TODO: Implement Neo4j query
-    return null;
+  static async findById(id: string): Promise<Bookmark | null> {
+    const bookmark = memoryStore.bookmarks.get(id);
+    return bookmark ? { ...bookmark, content: memoryStore.contents.get(bookmark.contentId) } : null;
   }
 
   /**
    * Get user's bookmarks
    */
   static async getUserBookmarks(
-    _userId: string,
-    _limit: number = 50,
-    _offset: number = 0
+    userId: string,
+    limit: number = 50,
+    offset: number = 0
   ): Promise<{ bookmarks: Bookmark[]; total: number }> {
-    // TODO: Implement Neo4j query with pagination
-    return { bookmarks: [], total: 0 };
+    const bookmarks = Array.from(memoryStore.bookmarks.values())
+      .filter(bookmark => bookmark.userId === userId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .map(bookmark => ({
+        ...bookmark,
+        content: memoryStore.contents.get(bookmark.contentId)
+      }));
+
+    return {
+      bookmarks: bookmarks.slice(offset, offset + limit),
+      total: bookmarks.length
+    };
   }
 
   /**
    * Check if content is bookmarked by user
    */
-  static async isBookmarked(_userId: string, _contentId: string): Promise<boolean> {
-    // TODO: Implement Neo4j query
-    return false;
+  static async isBookmarked(userId: string, contentId: string): Promise<boolean> {
+    return Array.from(memoryStore.bookmarks.values()).some(
+      bookmark => bookmark.userId === userId && bookmark.contentId === contentId
+    );
   }
 
   /**
    * Update bookmark
    */
-  static async update(_id: string, _tags?: string[], _notes?: string): Promise<Bookmark | null> {
-    // TODO: Implement Neo4j update
-    return null;
+  static async update(id: string, tags?: string[], notes?: string): Promise<Bookmark | null> {
+    const existingBookmark = memoryStore.bookmarks.get(id);
+    if (!existingBookmark) {
+      return null;
+    }
+
+    const updatedBookmark: Bookmark = {
+      ...existingBookmark,
+      tags: tags ?? existingBookmark.tags,
+      notes: notes ?? existingBookmark.notes,
+      content: memoryStore.contents.get(existingBookmark.contentId),
+      updatedAt: new Date()
+    };
+    memoryStore.bookmarks.set(id, updatedBookmark);
+    return updatedBookmark;
   }
 
   /**
    * Remove bookmark
    */
-  static async delete(_id: string): Promise<boolean> {
-    // TODO: Implement Neo4j delete
-    return false;
+  static async delete(id: string): Promise<boolean> {
+    return memoryStore.bookmarks.delete(id);
   }
 
   /**
    * Remove bookmark by content ID
    */
-  static async deleteByContentId(_userId: string, _contentId: string): Promise<boolean> {
-    // TODO: Implement Neo4j delete
-    return false;
+  static async deleteByContentId(userId: string, contentId: string): Promise<boolean> {
+    const bookmark = Array.from(memoryStore.bookmarks.values()).find(
+      item => item.userId === userId && item.contentId === contentId
+    );
+    if (!bookmark) {
+      return false;
+    }
+
+    return memoryStore.bookmarks.delete(bookmark.id);
   }
 
   /**
    * Get bookmarks by tag
    */
-  static async getByTag(_userId: string, _tag: string): Promise<Bookmark[]> {
-    // TODO: Implement Neo4j query
-    return [];
+  static async getByTag(userId: string, tag: string): Promise<Bookmark[]> {
+    return Array.from(memoryStore.bookmarks.values())
+      .filter(bookmark => bookmark.userId === userId && bookmark.tags.includes(tag))
+      .map(bookmark => ({
+        ...bookmark,
+        content: memoryStore.contents.get(bookmark.contentId)
+      }));
   }
 
   /**
    * Search bookmarks
    */
-  static async search(_userId: string, _query: string): Promise<Bookmark[]> {
-    // TODO: Implement search query
-    return [];
+  static async search(userId: string, query: string): Promise<Bookmark[]> {
+    const normalizedQuery = query.trim().toLowerCase();
+    return Array.from(memoryStore.bookmarks.values())
+      .filter(bookmark => {
+        if (bookmark.userId !== userId) {
+          return false;
+        }
+
+        const content = memoryStore.contents.get(bookmark.contentId);
+        const haystack = `${bookmark.notes ?? ''} ${bookmark.tags.join(' ')} ${content?.title ?? ''}`.toLowerCase();
+        return haystack.includes(normalizedQuery);
+      })
+      .map(bookmark => ({
+        ...bookmark,
+        content: memoryStore.contents.get(bookmark.contentId)
+      }));
   }
 }

@@ -1,5 +1,6 @@
 import { Content, SourceType } from '../types';
 import { ContentNode } from '../models';
+import { memoryStore, nextId } from '../database/memory-store';
 
 /**
  * Content Repository - Data access layer for Content operations
@@ -16,58 +17,99 @@ export class ContentRepository {
     sourceType: SourceType,
     excerpt?: string
   ): Promise<Content> {
-    // TODO: Implement Neo4j connection and save
-    const id = `content_${Date.now()}`;
+    const id = nextId('content');
     const contentNode = new ContentNode(id, userId, title, url, content, sourceType, excerpt);
-    return contentNode.toContent();
+    const createdContent = contentNode.toContent();
+    memoryStore.contents.set(id, createdContent);
+    return createdContent;
   }
 
   /**
    * Find content by ID
    */
-  static async findById(_id: string): Promise<Content | null> {
-    // TODO: Implement Neo4j query
-    return null;
+  static async findById(id: string): Promise<Content | null> {
+    return memoryStore.contents.get(id) ?? null;
   }
 
   /**
    * Get user's content with pagination
    */
   static async getUserContent(
-    _userId: string,
-    _limit: number = 20,
-    _offset: number = 0
+    userId: string,
+    limit: number = 20,
+    offset: number = 0
   ): Promise<{ content: Content[]; total: number }> {
-    // TODO: Implement Neo4j query with pagination
-    return { content: [], total: 0 };
+    const content = Array.from(memoryStore.contents.values())
+      .filter(item => item.userId === userId)
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+
+    return {
+      content: content.slice(offset, offset + limit),
+      total: content.length
+    };
   }
 
   /**
    * Update content
    */
-  static async update(_id: string, _data: Partial<Content>): Promise<Content | null> {
-    // TODO: Implement Neo4j update
-    return null;
+  static async update(id: string, data: Partial<Content>): Promise<Content | null> {
+    const existingContent = memoryStore.contents.get(id);
+    if (!existingContent) {
+      return null;
+    }
+
+    const updatedContent: Content = {
+      ...existingContent,
+      ...data,
+      metadata: data.metadata ?? existingContent.metadata,
+      analytics: data.analytics ?? existingContent.analytics,
+      updatedAt: new Date()
+    };
+    memoryStore.contents.set(id, updatedContent);
+    return updatedContent;
   }
 
   /**
    * Delete content
    */
-  static async delete(_id: string): Promise<boolean> {
-    // TODO: Implement Neo4j delete
-    return false;
+  static async delete(id: string): Promise<boolean> {
+    return memoryStore.contents.delete(id);
   }
 
   /**
    * Search content by full-text query
    */
   static async search(
-    _query: string,
-    _limit: number = 20,
-    _filters?: any
+    query: string,
+    limit: number = 20,
+    filters?: any
   ): Promise<Content[]> {
-    // TODO: Implement full-text search with Lucene/Elasticsearch
-    return [];
+    const normalizedQuery = query.trim().toLowerCase();
+    let results = Array.from(memoryStore.contents.values()).filter(content => {
+      const haystack = `${content.title} ${content.excerpt ?? ''} ${content.content}`.toLowerCase();
+      return haystack.includes(normalizedQuery);
+    });
+
+    if (filters?.sourceType) {
+      results = results.filter(content => content.sourceType === filters.sourceType);
+    }
+
+    if (filters?.sentiment) {
+      results = results.filter(content => content.analytics.sentiment.label === filters.sentiment);
+    }
+
+    if (filters?.dateRange) {
+      const startDate = new Date(filters.dateRange.startDate).getTime();
+      const endDate = new Date(filters.dateRange.endDate).getTime();
+      results = results.filter(content => {
+        const createdAt = content.createdAt.getTime();
+        return createdAt >= startDate && createdAt <= endDate;
+      });
+    }
+
+    return results
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice(0, limit);
   }
 
   /**
@@ -75,17 +117,17 @@ export class ContentRepository {
    */
   static async getTrendingContent(
     _timeRange: string = 'LAST_30_DAYS',
-    _limit: number = 20
+    limit: number = 20
   ): Promise<Content[]> {
-    // TODO: Implement query for trending content
-    return [];
+    return Array.from(memoryStore.contents.values())
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .slice(0, limit);
   }
 
   /**
    * Increment view count
    */
-  static async incrementViews(_id: string): Promise<boolean> {
-    // TODO: Implement Neo4j update
-    return false;
+  static async incrementViews(id: string): Promise<boolean> {
+    return memoryStore.contents.has(id);
   }
 }

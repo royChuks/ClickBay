@@ -4,7 +4,15 @@ import { ContentService } from '../../services/content.service';
 import { BookmarkService } from '../../services/bookmark.service';
 import { GraphRAGService } from '../../services/graphrag.service';
 import { AnalyticsService } from '../../services/analytics.service';
-import { requireAuth } from '../../middleware/auth';
+import {
+  generateRefreshToken,
+  generateToken,
+  requireAuth,
+  revokeAccessToken,
+  revokeAllRefreshTokensForUser,
+  revokeRefreshToken,
+  verifyRefreshToken
+} from '../../middleware/auth';
 
 interface ResolverContext extends RequestContext {}
 
@@ -117,12 +125,21 @@ export const resolvers = {
     },
 
     refreshToken: async (_: any, { refreshToken }: any) => {
-      // TODO: Implement refresh token validation and new token generation
-      return { token: '', refreshToken };
+      const decoded = verifyRefreshToken(refreshToken) as { userId: string };
+      revokeRefreshToken(refreshToken);
+
+      return {
+        token: generateToken(decoded.userId),
+        refreshToken: generateRefreshToken(decoded.userId)
+      };
     },
 
-    logout: async () => {
-      // TODO: Implement logout (invalidate tokens)
+    logout: async (_: any, __: any, context: ResolverContext) => {
+      requireAuth(context);
+      revokeAllRefreshTokensForUser(context.userId!);
+      if (context.token) {
+        revokeAccessToken(context.token);
+      }
       return true;
     },
 

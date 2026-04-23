@@ -77,7 +77,7 @@ export class GraphRAGService {
   /**
    * Extract entities from content
    */
-  static async extractEntities(contentId: string): Promise<Entity[]> {
+  static async extractEntities(_contentId: string): Promise<Entity[]> {
     // TODO: Implement entity extraction using NLP (e.g., spaCy, Stanford NER)
     // This would:
     // 1. Parse the content

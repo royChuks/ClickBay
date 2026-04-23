@@ -19,6 +19,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@apollo/client": "^4.1.7",
     "@types/bcryptjs": "^2.4.6",
     "apollo-server-express": "^3.13.0",
     "bcrypt": "^5.1.1",
@@ -27,7 +28,7 @@
     "dataloader": "^2.2.3",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "graphql": "^16.10.0",
+    "graphql": "^16.13.2",
     "jsonwebtoken": "^9.0.2",
     "neo4j-driver": "^5.28.1",
     "pg": "^8.13.3",
