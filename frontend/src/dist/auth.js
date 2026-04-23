@@ -1,7 +1,6 @@
 // Authentication functionality for ClickBay
-// Mock user storage (in a real app, this would be handled by a backend)
-const users = JSON.parse(localStorage.getItem('clickbay_users') || '[]');
-let currentUser = JSON.parse(localStorage.getItem('clickbay_current_user') || 'null');
+import { client, LOGIN_MUTATION, SIGNUP_MUTATION } from './graphqlClient';
+let currentUser = null;
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Check if user is already logged in
@@ -65,38 +64,30 @@ function initializeSocialAuth() {
     });
 }
 async function loginUser(email, password, rememberMe) {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    // Find user (in real app, this would be a server request)
-    const user = users.find(u => u.email === email);
-    if (!user) {
-        throw new Error('User not found. Please check your email or sign up.');
+    const { data } = await client.mutate({
+        mutation: LOGIN_MUTATION,
+        variables: { email, password }
+    });
+    if (data?.login) {
+        localStorage.setItem('token', data.login.token);
+        localStorage.setItem('refreshToken', data.login.refreshToken);
+        currentUser = data.login.user;
+        if (rememberMe) {
+            localStorage.setItem('clickbay_remember_login', 'true');
+        }
     }
-    // In a real app, you'd verify the password hash on the server
-    // For demo purposes, we'll just accept any password for existing users
-    currentUser = user;
-    localStorage.setItem('clickbay_current_user', JSON.stringify(currentUser));
-    if (rememberMe) {
-        localStorage.setItem('clickbay_remember_login', 'true');
+    else {
+        throw new Error('Invalid email or password');
     }
 }
 async function registerUser(name, email, password) {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    // Check if user already exists
-    const existingUser = users.find(u => u.email === email);
-    if (existingUser) {
-        throw new Error('An account with this email already exists.');
+    const { data } = await client.mutate({
+        mutation: SIGNUP_MUTATION,
+        variables: { name, email, password }
+    });
+    if (!data?.signup) {
+        throw new Error('Registration failed');
     }
-    // Create new user
-    const newUser = {
-        id: generateUserId(),
-        name: name.trim(),
-        email: email.toLowerCase().trim(),
-        createdAt: new Date()
-    };
-    users.push(newUser);
-    localStorage.setItem('clickbay_users', JSON.stringify(users));
 }
 function validateSignup(name, email, password, confirmPassword) {
     if (!name.trim()) {

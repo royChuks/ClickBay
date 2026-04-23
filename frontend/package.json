@@ -16,10 +16,12 @@
   "keywords": [
     ""
   ],
-    "devDependencies": {
-      "typescript": "^5.0.0",
-      "live-server": "^1.2.2"
-    },
+"devDependencies": {
+    "@apollo/client": "^3.8.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0",
+    "live-server": "^1.2.2"
+  },
 
   "author": "David Chuks",
   "license": "MIT"

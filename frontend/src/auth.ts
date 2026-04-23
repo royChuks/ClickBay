@@ -1,5 +1,7 @@
 // Authentication functionality for ClickBay
 
+import { client, LOGIN_MUTATION, SIGNUP_MUTATION, LOGOUT_MUTATION, CURRENT_USER_QUERY } from './graphqlClient';
+
 interface User {
     id: string;
     name: string;
@@ -7,9 +9,7 @@ interface User {
     createdAt: Date;
 }
 
-// Mock user storage (in a real app, this would be handled by a backend)
-const users: User[] = JSON.parse(localStorage.getItem('clickbay_users') || '[]');
-let currentUser: User | null = JSON.parse(localStorage.getItem('clickbay_current_user') || 'null');
+let currentUser: User | null = null;
 
 // DOM Content Loaded
 document.addEventListener('DOMContentLoaded', () => {
@@ -81,46 +81,32 @@ function initializeSocialAuth(): void {
 }
 
 async function loginUser(email: string, password: string, rememberMe: boolean): Promise<void> {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    const { data } = await client.mutate({
+        mutation: LOGIN_MUTATION,
+        variables: { email, password }
+    });
 
-    // Find user (in real app, this would be a server request)
-    const user = users.find(u => u.email === email);
-    if (!user) {
-        throw new Error('User not found. Please check your email or sign up.');
-    }
-
-    // In a real app, you'd verify the password hash on the server
-    // For demo purposes, we'll just accept any password for existing users
-
-    currentUser = user;
-    localStorage.setItem('clickbay_current_user', JSON.stringify(currentUser));
-
-    if (rememberMe) {
-        localStorage.setItem('clickbay_remember_login', 'true');
+    if (data?.login) {
+        localStorage.setItem('token', data.login.token);
+        localStorage.setItem('refreshToken', data.login.refreshToken);
+        currentUser = data.login.user;
+        if (rememberMe) {
+            localStorage.setItem('clickbay_remember_login', 'true');
+        }
+    } else {
+        throw new Error('Invalid email or password');
     }
 }
 
 async function registerUser(name: string, email: string, password: string): Promise<void> {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    const { data } = await client.mutate({
+        mutation: SIGNUP_MUTATION,
+        variables: { name, email, password }
+    });
 
-    // Check if user already exists
-    const existingUser = users.find(u => u.email === email);
-    if (existingUser) {
-        throw new Error('An account with this email already exists.');
+    if (!data?.signup) {
+        throw new Error('Registration failed');
     }
-
-    // Create new user
-    const newUser: User = {
-        id: generateUserId(),
-        name: name.trim(),
-        email: email.toLowerCase().trim(),
-        createdAt: new Date()
-    };
-
-    users.push(newUser);
-    localStorage.setItem('clickbay_users', JSON.stringify(users));
 }
 
 function validateSignup(name: string, email: string, password: string, confirmPassword: string): void {
